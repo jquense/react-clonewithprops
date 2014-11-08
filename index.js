@@ -1,6 +1,5 @@
 'use strict';
 var React    = require('react')
-  , extend   = require('xtend')
   , hasOwn   = Object.prototype.hasOwnProperty
   , version  = React.version.split('.').map(parseFloat)
   , RESERVED = {
@@ -12,7 +11,7 @@ var React    = require('react')
     };
 
 module.exports = function cloneWithProps(child, props) {
-  var newProps = mergeProps(extend(props), child.props);
+  var newProps = mergeProps(props, child.props);
 
   if (!hasOwn.call(newProps, 'children') && hasOwn.call(child.props, 'children'))
     newProps.children = child.props.children;
@@ -38,16 +37,17 @@ module.exports = function cloneWithProps(child, props) {
   function MockLegacyFactory(){}
 }
 
-//mutates first arg
-function mergeProps(source, target) {
-  for (var key in target) {
-    if (hasOwn.call(RESERVED, key) )
-      RESERVED[key](source, target[key], key)
+function mergeProps(currentProps, childProps) {
+  var newProps = extend(currentProps), key
 
-    else if ( !hasOwn.call(source, key) )
-      source[key] = target[key];
+  for (key in childProps) {
+    if (hasOwn.call(RESERVED, key) )
+      RESERVED[key](newProps, childProps[key], key)
+
+    else if ( !hasOwn.call(newProps, key) )
+      newProps[key] = childProps[key];
   }
-  return source
+  return newProps
 }
 
 function resolve(fn){
@@ -60,4 +60,12 @@ function resolve(fn){
 function joinClasses(a, b){
   if ( !a ) return b || ''
   return a + (b ? ' ' + b : '')
+}
+
+function extend() {
+  var target = {};
+  for (var i = 0; i < arguments.length; i++) 
+    for (var key in arguments[i]) if (hasOwn.call(arguments[i], key)) 
+      target[key] = arguments[i][key]   
+  return target
 }

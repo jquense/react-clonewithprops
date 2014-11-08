@@ -1,7 +1,7 @@
 {
   "name": "react-clonewithprops",
   "description": "Stand-alone React cloneWithProps util that works with multiple versions of React",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "url": "git://github.com/jquense/react-clonewithprops.git"
   },
@@ -32,8 +32,5 @@
     "scriptjs": "^2.5.7",
     "webpack": "^1.4.13",
     "webpack-dev-server": "^1.6.5"
-  },
-  "dependencies": {
-    "xtend": "^4.0.0"
   }
 }
